@@ -10,7 +10,7 @@ start_date = end_date - datetime.timedelta(days=30)
 
 # ดึงข้อมูลจาก Yahoo Finance
 try:
-    df = yf.download("XAUUSD=X", start=start_date, end=end_date, interval="1h")
+    df = yf.download("GC=F", start=start_date, end=end_date, interval="1h")
 
     # เช็กว่ามีข้อมูลหรือไม่
     if df.empty:
