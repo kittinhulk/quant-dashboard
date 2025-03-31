@@ -13,4 +13,5 @@ st.line_chart(df)
 
 # Real-time update simulation
 if st.button("📡 Refresh Data"):
-    st.experimental_rerun()
+    st.rerun()
+
