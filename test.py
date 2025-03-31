@@ -1,6 +1,7 @@
-import yfinance as yf
-import streamlit as st
+import pandas as pd
 
+# โหลดข้อมูลจากไฟล์ CSV
+df = pd.read_csv("XAU_1h_data.csv")
 
-df = yf.download("GC=F", period="7d", interval="1h")
-print(df.tail())
+# ดูตัวอย่าง 5 แถวแรก
+print(df.head())
