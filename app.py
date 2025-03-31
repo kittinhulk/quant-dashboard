@@ -1,17 +1,18 @@
 import streamlit as st
+import yfinance as yf
 import pandas as pd
-import numpy as np
-import time
+import datetime
 
-st.title("📈 Real-Time Quant Dashboard (Mocked Jim Simons Style)")
+st.title("📈 XAU/USD Real-Time Dashboard")
 
-# Simulated data
-price = 1800 + np.random.randn(100).cumsum()
-df = pd.DataFrame({'XAU/USD': price})
+# ตั้งช่วงเวลาที่จะดึงข้อมูล
+end_date = datetime.datetime.now()
+start_date = end_date - datetime.timedelta(days=30)
 
-st.line_chart(df)
+# ดึงราคาทองคำ (XAU/USD)
+# ชื่อย่อใน Yahoo Finance คือ "XAUUSD=X"
+df = yf.download("XAUUSD=X", start=start_date, end=end_date, interval="1h")
 
-# Real-time update simulation
-if st.button("📡 Refresh Data"):
-    st.rerun()
-
+# แสดงข้อมูล
+st.line_chart(df["Close"])
+st.write("Latest Price:", df["Close"].iloc[-1])
