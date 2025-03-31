@@ -1,5 +1,7 @@
 import yfinance as yf
 import pandas as pd
+import streamlit as st
+
 import datetime
 
 st.title("📈 XAU/USD Real-Time Dashboard")
