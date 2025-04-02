@@ -72,6 +72,32 @@ st.subheader("📊 Test Set Evaluation")
 st.write(f"**RMSE:** {rmse:,.2f}")
 st.write(f"**MAE:** {mae:,.2f}")
 
+
+# ---------------- Improved Plot: Actual vs Predicted on Test Set ----------------
+st.subheader("🟠 Actual vs Predicted on Test Set")
+
+fig2, ax2 = plt.subplots(figsize=(14, 5))
+
+test_dates = df['Date'].iloc[-len(y_test):]
+
+# กราฟ Actual
+ax2.plot(test_dates, y_actual_test, label='🔵 Actual', linewidth=2)
+
+# กราฟ Predicted
+ax2.plot(test_dates, y_pred_test, label='🟠 Predicted', linestyle='--', linewidth=2)
+
+# ปรับความสวยงาม
+ax2.set_title("Gold Futures (GC=F) - Test Set: Actual vs Predicted", fontsize=16)
+ax2.set_xlabel("Date", fontsize=12)
+ax2.set_ylabel("Price (USD)", fontsize=12)
+ax2.grid(True, linestyle='--', alpha=0.5)
+ax2.legend(fontsize=12)
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+st.pyplot(fig2)
+
+
 # ---------------- Forecast Future ----------------
 st.subheader(f"📈 Forecast for next {days_to_predict} days ({future_steps} hours)")
 last_input = scaled_data[-24:]

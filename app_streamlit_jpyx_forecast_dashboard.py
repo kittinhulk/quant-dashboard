@@ -18,24 +18,24 @@ if gpus:
 
 # ---------------- Streamlit UI ----------------
 st.set_page_config(layout="wide")
-st.title("🔮 LSTM Forecast Dashboard: Gold Futures (GC=F)")
+st.title("🔮 LSTM Forecast Dashboard: USD/JPY (JPY=X)")
 
 days_to_predict = st.slider("Select number of days to forecast:", min_value=1, max_value=60, value=30)
 future_steps = days_to_predict * 24
 
 with st.spinner("📥 Loading and processing data..."):
-    df = yf.download("GC=F", period="730d", interval="1h", progress=False)
+    df = yf.download("JPY=X", period="730d", interval="1h", progress=False)
     df.dropna(inplace=True)
     df['Date'] = df.index
 
     if df.empty or 'Close' not in df.columns:
-        st.error("❌ ไม่พบข้อมูล GC=F จาก Yahoo Finance (อาจเกิน 2 ปี หรือไม่มีข้อมูลช่วงนี้)")
+        st.error("❌ ไม่พบข้อมูล JPY=X จาก Yahoo Finance (อาจเกิน 2 ปี หรือไม่มีข้อมูลช่วงนี้)")
         st.stop()
 
     data = df[['Close']].dropna().values
 
     if len(data) == 0:
-        st.error("❌ ไม่พบข้อมูลราคาปิด GC=F เพียงพอสำหรับการทำนาย")
+        st.error("❌ ไม่พบข้อมูลราคาปิด JPY=X เพียงพอสำหรับการทำนาย")
         st.stop()
 
     scaler = MinMaxScaler()
@@ -72,6 +72,20 @@ st.subheader("📊 Test Set Evaluation")
 st.write(f"**RMSE:** {rmse:,.2f}")
 st.write(f"**MAE:** {mae:,.2f}")
 
+# ---------------- Plot Actual vs Predicted on Test Set ----------------
+st.subheader("🟠 Actual vs Predicted on Test Set")
+fig2, ax2 = plt.subplots(figsize=(12, 4))
+test_dates = df['Date'].iloc[-len(y_test):]
+ax2.plot(test_dates, y_actual_test, label='Actual', linewidth=1.5)
+ax2.plot(test_dates, y_pred_test, label='Predicted', linestyle='--')
+ax2.set_title("JPY=X Actual vs Predicted - Test Set")
+ax2.set_xlabel("Date")
+ax2.set_ylabel("Price (USD)")
+ax2.grid(True)
+ax2.legend()
+plt.xticks(rotation=45)
+st.pyplot(fig2)
+
 # ---------------- Forecast Future ----------------
 st.subheader(f"📈 Forecast for next {days_to_predict} days ({future_steps} hours)")
 last_input = scaled_data[-24:]
@@ -91,7 +105,7 @@ st.download_button("📥 Download Forecast as CSV", data=csv, file_name='gold_fo
 # ---------------- Plot ----------------
 fig, ax = plt.subplots(figsize=(12, 5))
 ax.plot(timestamps, future_predictions, label='Forecasted Price', color='orange')
-ax.set_title(f'Gold Futures (GC=F) Forecast - Next {days_to_predict} Days')
+ax.set_title(f'USD/JPY (JPY=X) Forecast - Next {days_to_predict} Days')
 ax.set_xlabel('Date')
 ax.set_ylabel('Price (USD)')
 ax.grid(True)

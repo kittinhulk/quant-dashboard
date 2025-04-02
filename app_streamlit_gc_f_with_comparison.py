@@ -72,6 +72,20 @@ st.subheader("📊 Test Set Evaluation")
 st.write(f"**RMSE:** {rmse:,.2f}")
 st.write(f"**MAE:** {mae:,.2f}")
 
+# ---------------- Plot Actual vs Predicted on Test Set ----------------
+st.subheader("🟠 Actual vs Predicted on Test Set")
+fig2, ax2 = plt.subplots(figsize=(12, 4))
+test_dates = df['Date'].iloc[-len(y_test):]
+ax2.plot(test_dates, y_actual_test, label='Actual', linewidth=1.5)
+ax2.plot(test_dates, y_pred_test, label='Predicted', linestyle='--')
+ax2.set_title("GC=F Actual vs Predicted - Test Set")
+ax2.set_xlabel("Date")
+ax2.set_ylabel("Price (USD)")
+ax2.grid(True)
+ax2.legend()
+plt.xticks(rotation=45)
+st.pyplot(fig2)
+
 # ---------------- Forecast Future ----------------
 st.subheader(f"📈 Forecast for next {days_to_predict} days ({future_steps} hours)")
 last_input = scaled_data[-24:]
